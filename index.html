@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#4fc3f7" id="themeColor">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ARISE">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>ARISE — Hunter System</title>
+</head>
+<body class="theme-jinwoo">
+
+<div class="bg"><div class="bg-grid"></div><div class="bg-glow"></div></div>
+<div class="char-art" id="charArt"></div>
+<div class="lvfl" id="lvfl"></div>
+<div class="toast" id="toast"></div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sdbg" id="sdbg" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">A<span>RISE</span></div>
+    <button class="sb-close" onclick="closeSidebar()">&#x2715;</button>
+  </div>
+  <div class="sb-hunter">
+    <div class="sb-avatar" id="sbAvatar">&#x26A1;</div>
+    <div class="sb-info">
+      <div class="sb-name">HUNTER</div>
+      <div class="sb-rank" id="sbRank">E-RANK</div>
+      <div class="sb-lv" id="sbLv">LEVEL 1</div>
+    </div>
+  </div>
+  <div class="sb-xpbar">
+    <div class="sb-xplbl" id="sbXpLbl">0 / 100 XP</div>
+    <div class="sb-xpo"><div class="sb-xpi" id="sbXpi" style="width:0%"></div></div>
+  </div>
+  <nav class="sb-nav">
+    <button class="sb-item act" id="si-dash"    onclick="goPage('dash');closeSidebar()">
+      <span class="sb-ico">&#x2B21;</span><span>STATUS</span>
+    </button>
+    <button class="sb-item" id="si-quests"  onclick="goPage('quests');closeSidebar()">
+      <span class="sb-ico">&#x25C8;</span><span>DAILY QUESTS</span>
+    </button>
+    <button class="sb-item" id="si-workout" onclick="goPage('workout');closeSidebar()">
+      <span class="sb-ico">&#x2694;</span><span>TRAINING</span>
+    </button>
+    <button class="sb-item" id="si-log"     onclick="goPage('log');closeSidebar()">
+      <span class="sb-ico">&#x25A3;</span><span>ACTIVITY LOG</span>
+    </button>
+  </nav>
+  <div class="sb-footer">
+    <button class="ibtn" id="ibtn" onclick="installPWA()">&#x2B07; INSTALL APP</button>
+    <button class="btn bre bsm" onclick="resetDay();closeSidebar()" style="width:100%;justify-content:center;margin-top:8px">&#x21BA; RESET DAY</button>
+    <div class="sb-ver">ARISE v4 · HUNTER SYSTEM</div>
+  </div>
+</aside>
+
+<!-- ADD QUEST MODAL -->
+<div class="mobg" id="mobg">
+  <div class="mo">
+    <div class="mohdl"></div>
+    <div class="motitle">&#x2B21; ADD QUEST</div>
+    <div class="fg"><label class="fl">QUEST NAME</label><input class="fi" id="hName" type="text" placeholder="e.g. 100 Push-ups" autocomplete="off"></div>
+    <div class="fg"><label class="fl">DIFFICULTY</label>
+      <select class="fsel" id="hXP">
+        <option value="10">E-Rank — +10 XP (Easy)</option>
+        <option value="25" selected>D-Rank — +25 XP (Normal)</option>
+        <option value="50">C-Rank — +50 XP (Hard)</option>
+        <option value="100">B-Rank — +100 XP (Extreme)</option>
+        <option value="200">A-Rank — +200 XP (Legendary)</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">FREQUENCY</label>
+      <select class="fsel" id="hFreq">
+        <option value="daily">Daily</option>
+        <option value="weekdays">Weekdays Only</option>
+        <option value="weekends">Weekends Only</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">COLOR</label>
+      <div class="cgrid" id="cgrid">
+        <div class="copt sel" data-c="#4fc3f7" style="background:#4fc3f7"></div>
+        <div class="copt" data-c="#b388ff" style="background:#b388ff"></div>
+        <div class="copt" data-c="#69f0ae" style="background:#69f0ae"></div>
+        <div class="copt" data-c="#ffd54f" style="background:#ffd54f"></div>
+        <div class="copt" data-c="#ff7043" style="background:#ff7043"></div>
+        <div class="copt" data-c="#f06292" style="background:#f06292"></div>
+        <div class="copt" data-c="#ef9a9a" style="background:#ef9a9a"></div>
+        <div class="copt" data-c="#80cbc4" style="background:#80cbc4"></div>
+      </div>
+    </div>
+    <div class="moftr">
+      <button class="btn bre" onclick="closeMod()">CANCEL</button>
+      <button class="btn bp1" onclick="addHabit()">&#x2B21; CONFIRM</button>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+  <!-- TOPBAR -->
+  <div class="topbar" id="topbar">
+    <button class="hmbtn" onclick="openSidebar()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="tlogo" id="tlogo">A<span>RISE</span></div>
+    <div class="trk-pill" id="trkPill" style="color:#555;border-color:#333">E</div>
+  </div>
+
+  <div class="pages">
+    <!-- DASHBOARD -->
+    <div class="page active" id="pg-dash">
+      <div class="phr">
+        <div><div class="phtag">&#x25C8; STATUS</div><div class="phtitle">HUNTER <span>STATUS</span></div></div>
+      </div>
+      <!-- CHARACTER BANNER -->
+      <div class="dcb" id="dcb">
+        <div class="dcb-inner">
+          <div class="dcb-gw" id="dcbGw">
+            <img class="dcb-gif" id="dcbGif" src="" alt="" style="opacity:0">
+            <span id="dcbEmoji" style="position:absolute;display:none;font-size:48px"></span>
+            <div class="dcb-fade" id="dcbFade"></div>
+          </div>
+          <div class="dcb-info">
+            <div class="dcb-tag">&#x25CF; ACTIVE PLAN</div>
+            <div class="dcb-name" id="dcbName"></div>
+            <div class="dcb-series" id="dcbSeries"></div>
+            <div class="dcb-quote" id="dcbQuote"></div>
+            <div class="dcb-tier" id="dcbTier"></div>
+          </div>
+        </div>
+      </div>
+      <div class="chips">
+        <div class="chip p1"><div class="cico">&#x26A1;</div><div class="cval" id="dLv">1</div><div class="clbl">LEVEL</div></div>
+        <div class="chip go"><div class="cico">&#x2726;</div><div class="cval" id="dXP">0</div><div class="clbl">TOTAL XP</div></div>
+        <div class="chip gr"><div class="cico">&#x1F525;</div><div class="cval" id="dStr">0</div><div class="clbl">STREAK</div></div>
+        <div class="chip p2"><div class="cico">&#x25C8;</div><div class="cval" id="dDn">0/0</div><div class="clbl">TODAY</div></div>
+      </div>
+      <div class="xpw">
+        <div class="xplbls"><span id="xplbl">LV 1 → LV 2</span><span id="xpnum">0/100 XP</span></div>
+        <div class="xpo"><div class="xpi" id="xpbar" style="width:0%"></div></div>
+      </div>
+      <div class="rtrack" id="rtrack">
+        <div class="rp rE ac">E</div><div class="rp rD">D · Lv5</div>
+        <div class="rp rC">C · Lv15</div><div class="rp rB">B · Lv30</div>
+        <div class="rp rA">A · Lv50</div><div class="rp rS">S · Lv80</div>
+      </div>
+      <div class="mb"><span class="st">TODAY'S QUESTS</span><span id="dqc" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txd)"></span></div>
+      <div id="dashList"></div>
+    </div>
+
+    <!-- QUESTS -->
+    <div class="page" id="pg-quests">
+      <div class="phr">
+        <div><div class="phtag">&#x25C8; QUEST BOARD</div><div class="phtitle">DAILY <span>QUESTS</span></div></div>
+      </div>
+      <div id="questList"></div>
+    </div>
+
+    <!-- WORKOUT -->
+    <div class="page" id="pg-workout">
+      <div class="phr">
+        <div><div class="phtag">&#x25C8; TRAINING</div><div class="phtitle">WORKOUT <span>PLANS</span></div></div>
+      </div>
+      <div id="awp"></div>
+      <div id="plist"></div>
+    </div>
+
+    <!-- LOG -->
+    <div class="page" id="pg-log">
+      <div class="phr">
+        <div><div class="phtag">&#x25C8; RECORDS</div><div class="phtitle">ACTIVITY <span>LOG</span></div></div>
+        <button class="btn bre bsm" onclick="clearLog()">&#x2715; CLEAR</button>
+      </div>
+      <div id="logList"></div>
+    </div>
+  </div>
+
+  <button class="fab" id="fab" onclick="openMod()">&#xFF0B;</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
